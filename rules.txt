@@ -1,0 +1,30 @@
+S' -> S | €
+S -> J;S | J;
+J -> B | G | E,F,B
+
+E -> <start> W C D
+F -> <stop> W C D
+B -> <once> W C D
+T -> <store> <as> s P
+G -> <force> s as s <if> C D
+G -> <force> s as s D
+
+P -> <weight> l | €
+
+D -> <set> L | €
+L -> A | A, L
+A -> v = l
+
+W -> <after> | <when>
+
+C -> O <or> O | O
+O -> N <and> N | N
+N -> <not> V | V
+V -> v = l | <<regex>> | (C)
+
+
+
+
+start when [] set a = 2,
+stop after [],
+store # as 'result' weight 5;
