@@ -79,14 +79,22 @@ class Program():
         self.next_p.eval(ctx)
 
 class Rule():
-    def __init__(self, start=None, stop=None, store=None, once=None):
+    def __init__(self, start=None, stop=None, store=None):
         self.start = start
         self.stop = stop
         self.store = store
-        self.once = once
     
     def eval(self, ctx):
-        pass
+        name = store.get_name()
+        if id(self) in ctx.active:
+            stop = self.stop.eval()
+            if stop[0]: 
+                ctx.output[name] += ctx.text[ctx.offset:ctx.offset+stop[1]]
+            else:
+                ctx.output[name] += ctx.text[ctx.offset]
+        else:
+            start = self.start.eval()
+            
 
 class Delimitation():
     def __init__(self, is_after):
@@ -119,7 +127,15 @@ class Force():
     
     def eval(self, ctx):
         if self.conditional.eval(ctx)[0]:
-            ctx.output[self.dest]["value"] = self.source
+            ctx.output[self.dest] = self.source
 
 class Store():
-    def __init__(self, )
+    def __init__(self, name, weight):
+        self.name = name
+        self.weight = weight
+    
+    def get_name(self):
+        return self.name
+    
+    def get_weight(self):
+        return self.weight
