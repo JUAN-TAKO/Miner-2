@@ -8,14 +8,16 @@ class Lexer():
     def _add_tokens(self):
         # Keywords
         self.lexer.add('SET', r'set')
+        self.lexer.add('INIT', r'init')
         self.lexer.add('AS', r'as')
+        self.lexer.add('TO', r'to')
         self.lexer.add('WEIGHT', 'weight')
-        self.lexer.add('IF', 'if')
         #Lines
         self.lexer.add('ONCE', r'once')
         self.lexer.add('START', r'start')
         self.lexer.add('STOP', r'stop')
         self.lexer.add('STORE', r'store')
+        self.lexer.add('FORCE', r'force')
         #Delimitations
         self.lexer.add('AFTER', r'after')
         self.lexer.add('WHEN', r'when')
@@ -35,7 +37,7 @@ class Lexer():
         #Regex
         self.lexer.add('REGEX', r'\<\<.*\>\>')
         #String
-        self.lexer.add('STR', r'\'.*\'')
+        self.lexer.add('STR', r'\'[^\']*\'')
         #Number
         self.lexer.add('NBR', r'[0-9]+')
         # Ignore spaces

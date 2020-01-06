@@ -54,7 +54,7 @@ class Number():
     def __init__(self, value):
         self.value = value
 
-    def eval(self):
+    def eval(self, ctx):
         return int(self.value)
 
 class Regex():
@@ -63,7 +63,10 @@ class Regex():
     
     def eval(self, ctx):
         match = re.search(self.exp, ctx.text[ctx.offset:])
-        return (not match is None, match.end())
+        if match is None:
+            return (False, 0)
+        else:
+            return (True, match.end())
 
 class Compare(BinaryOp):
     def eval(self, ctx):
@@ -75,48 +78,62 @@ class Program():
         self.next_p = next_p
     
     def eval(self, ctx):
+        if ctx.offset in ctx.triggers:
+            for to_exec in ctx.triggers[ctx.offset]:
+                to_exec.eval(ctx)
         self.rule.eval(ctx)
         self.next_p.eval(ctx)
 
 class Rule():
-    def __init__(self, start=None, stop=None, store=None):
+    def __init__(self, start, stop, store):
         self.start = start
         self.stop = stop
         self.store = store
     
     def eval(self, ctx):
-        name = store.get_name()
+        name = self.store.get_name()
+        if not name in ctx.output:
+            ctx.output[name] = ""
         if id(self) in ctx.active:
-            stop = self.stop.eval()
-            if stop[0]: 
-                ctx.output[name] += ctx.text[ctx.offset:ctx.offset+stop[1]]
+            stop = self.stop.eval(ctx)
+            if stop[0]:
+                if self.stop.is_after():
+                    ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
+                
+                del ctx.active[id(self)]
             else:
-                ctx.output[name] += ctx.text[ctx.offset]
+                if ctx.offset >= ctx.active[id(self)]:
+                    ctx.output[name] += ctx.text[ctx.offset]
+                
         else:
-            start = self.start.eval()
-            
-
-class Delimitation():
-    def __init__(self, is_after):
-        self.is_after = is_after
-    
-    def eval(self, ctx):
-        return self.is_after
-
+            start = self.start.eval(ctx)
+            if start[0]:
+                if self.start.is_after():
+                    ctx.active[id(self)] = start[1]
+                else:
+                    ctx.active[id(self)] = ctx.offset
+                    ctx.output[name] += ctx.text[ctx.offset]
 
 class Conditional():
-    def __init__(self, condition, to_execute, delim):
+    def __init__(self, condition, to_execute, delim_after):
         self.condition = condition
         self.to_execute = to_execute
-        self.delim = delim
+        self.delim = delim_after
     
-    def get_delim(self):
+    def is_after(self):
         return self.delim
     
     def eval(self, ctx):
         res = self.condition.eval(ctx) 
         if res[0]:
-            self.to_execute.eval(ctx)
+            if self.delim:
+                off = ctx.offset + res[1]
+                if off not in ctx.triggers:
+                    ctx.triggers[off] = []
+                
+                ctx.triggers[off] += [self.to_execute]
+            else:
+                self.to_execute.eval(ctx)
         return res
 
 class Force():
@@ -139,3 +156,18 @@ class Store():
     
     def get_weight(self):
         return self.weight
+
+class Init():
+    def __init__(self, assigns):
+        self.assigns = assigns
+        self.done = False
+    def eval(self, ctx):
+        if not self.done:
+            self.assigns.eval(ctx)
+            self.done = True
+
+class Nop():
+    def __init__(self):
+        pass
+    def eval(self, ctx):
+        pass

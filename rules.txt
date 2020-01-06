@@ -1,6 +1,6 @@
 S' -> S | €
 S -> J;S | J;
-J -> B | G | E,F,B
+J -> B | G | E,F,B | D
 
 E -> <start> W C D
 F -> <stop> W C D
