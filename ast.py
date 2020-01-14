@@ -114,11 +114,20 @@ class Rule():
                     ctx.active[id(self)] = ctx.offset
                     ctx.output[name] += ctx.text[ctx.offset]
 
-class Conditional():
-    def __init__(self, condition, to_execute, delim_after):
-        self.condition = condition
+class Weight():
+    def __init__(self, weight, to_execute):
+        self.weight = weight
         self.to_execute = to_execute
+    def eval(self, ctx):
+        ctx.score += self.weight
+        self.to_execute.eval(ctx)
+
+class Conditional():
+    def __init__(self, condition, delim_after, weight):
+        self.condition = condition
+        self.weight = weight
         self.delim = delim_after
+        self.weight = weight
     
     def is_after(self):
         return self.delim
@@ -131,9 +140,9 @@ class Conditional():
                 if off not in ctx.triggers:
                     ctx.triggers[off] = []
                 
-                ctx.triggers[off] += [self.to_execute]
+                ctx.triggers[off] += [self.weight]
             else:
-                self.to_execute.eval(ctx)
+                self.weight.eval(ctx)
         return res
 
 class Force():

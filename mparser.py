@@ -1,6 +1,6 @@
 from lexer import Lexer
 from rply import ParserGenerator
-from ast import And, Or, Not, Assign, Rule
+from ast import And, Or, Not, Assign, Rule, Weight
 from ast import AssignList, Variable, Program
 from ast import Number, Regex, Compare, Nop
 from ast import Conditional, Store, Force, Init
@@ -53,15 +53,21 @@ class Parser():
         @self.pg.production('start : START delimitation or_condition set_vars')
         @self.pg.production('stop : STOP delimitation or_condition set_vars')
         def conditional(p):
-            return Conditional(p[2], p[3], p[1])
+            return Conditional(p[2], p[1], Weight(Number(0), p[3]))
+
+        @self.pg.production('once : ONCE delimitation or_condition WEIGHT NBR set_vars')
+        def once_weight(p):
+            return Conditional(p[2], p[1], Weight(Number(p[4].getstr()), p[5]))
 
         @self.pg.production('force : FORCE STR TO STR delimitation or_condition set_vars')
         def force_cond(p):
-            return Force(p[3].getstr(), p[1].getstr(), Conditional(p[5], p[6], p[4]))
+            cond = Conditional(p[5], p[4], Weight(Number(0), p[6]))
+            return Force(p[3].getstr(), p[1].getstr(), cond)
 
         @self.pg.production('force : FORCE STR TO STR WEIGHT NBR delimitation or_condition set_vars')
         def force_cond_weight(p):
-            return Force(p[3].getstr(), p[1].getstr(), Conditional(p[7], p[8], p[6]))
+            cond = Conditional(p[7], p[6], Weight(Number(p[5].getstr()), p[8]))
+            return Force(p[3].getstr(), p[1].getstr(), cond)
 
         @self.pg.production('store : STORE AS STR WEIGHT NBR')
         def store(p):
