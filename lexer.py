@@ -36,6 +36,7 @@ class Lexer():
         self.lexer.add('VAR', r'[a-zA-Z_][a-zA-Z0-9_]*')
         #Regex
         self.lexer.add('REGEX', r'\<\<.*\>\>')
+        self.lexer.add('REG_REF', r'@.*')
         #String
         self.lexer.add('STR', r'\'[^\']*\'')
         #Number

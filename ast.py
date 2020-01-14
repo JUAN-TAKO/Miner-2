@@ -94,6 +94,15 @@ class Rule():
         name = self.store.get_name()
         if not name in ctx.output:
             ctx.output[name] = ""
+
+        if id(self) not in ctx.active:
+            start = self.start.eval(ctx)
+            if start[0]:
+                if self.start.is_after():
+                    ctx.active[id(self)] = start[1]
+                else:
+                    ctx.active[id(self)] = ctx.offset
+           
         if id(self) in ctx.active:
             stop = self.stop.eval(ctx)
             if stop[0]:
@@ -104,22 +113,14 @@ class Rule():
             else:
                 if ctx.offset >= ctx.active[id(self)]:
                     ctx.output[name] += ctx.text[ctx.offset]
-                
-        else:
-            start = self.start.eval(ctx)
-            if start[0]:
-                if self.start.is_after():
-                    ctx.active[id(self)] = start[1]
-                else:
-                    ctx.active[id(self)] = ctx.offset
-                    ctx.output[name] += ctx.text[ctx.offset]
+        
 
 class Weight():
     def __init__(self, weight, to_execute):
         self.weight = weight
         self.to_execute = to_execute
     def eval(self, ctx):
-        ctx.score += self.weight
+        ctx.score += self.weight.eval(ctx)
         self.to_execute.eval(ctx)
 
 class Conditional():

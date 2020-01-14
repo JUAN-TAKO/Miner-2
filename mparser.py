@@ -13,13 +13,15 @@ class Context():
         self.output = {}
         self.variables = {}
         self.triggers = {}
+        self.score = 0
 
 class Parser():
-    def __init__(self):
+    def __init__(self, reg_refs):
         self.pg = ParserGenerator(
             # A list of all token names accepted by the parser.
             [rule.name for rule in Lexer().get_lexer().rules]
         )
+        self.reg_refs = reg_refs
     
     def get_parser(self):
         return self.pg.build()
@@ -113,6 +115,10 @@ class Parser():
         @self.pg.production('cond : REGEX')
         def regex(p):
             return Regex(p[0].getstr()[2:-2])
+        
+        @self.pg.production('cond : REG_REF')
+        def reg_ref(p):
+            return Regex(self.reg_refs[p[0].getstr()[1:]])
         
         @self.pg.production('set_vars : SET assignements')
         def set_vars(p):

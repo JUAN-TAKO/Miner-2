@@ -2,13 +2,13 @@ from lexer import Lexer
 from mparser import Parser, Context
 
 program = """
-init a = 0;
+init a = 0, r = 0;
 
 once after <<\$>> set a = 1;
 
-start when a = 1 set a = 2
-stop after <<[0-9]{5}>>
-store as 'result' weight 3;
+start when r=0 and <<[0-9]{5}>>
+stop after <<[0-9]{5}>> set r=1
+store as 'Ref' weight 1;
 
 force 'started' to 'true' when a = 2 set a = 3;
 """
