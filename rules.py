@@ -7,6 +7,7 @@ rules = {
     "pdf_main": [
         {
             "min_score" : 41,
+            "max_score" : 50,
             "rules": """
                 init a=0, s=0, d=0, f=0, r=0;
 

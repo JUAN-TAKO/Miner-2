@@ -84,6 +84,8 @@ class Program():
         self.rule.eval(ctx)
         self.next_p.eval(ctx)
 
+        return ctx.score
+
 class Rule():
     def __init__(self, start, stop, store):
         self.start = start
@@ -121,6 +123,7 @@ class Weight():
         self.to_execute = to_execute
     def eval(self, ctx):
         ctx.score += self.weight.eval(ctx)
+        ctx.matches += 1
         self.to_execute.eval(ctx)
 
 class Conditional():

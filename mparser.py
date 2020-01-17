@@ -14,6 +14,7 @@ class Context():
         self.variables = {}
         self.triggers = {}
         self.score = 0
+        self.matches = 0
 
 class Parser():
     def __init__(self, reg_refs):
