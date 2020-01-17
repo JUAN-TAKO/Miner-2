@@ -38,6 +38,17 @@ rules = {
                 stop when <<$>>
                 store as 'Type' weight 5;
 
+                start when <<Nature du sinistre:>>
+                stop when <<$>>
+                store as 'Nature' weight 1;
+
+                start when d=2 and <<$>>
+                stop when <<Sociétaire>> set d=3
+                store as 'Charges' weight 5;
+
+                start when d=3 and <<$>>
+                stop when <<$>>
+                store as 'Type' weight 5;
             """
         }
     ]

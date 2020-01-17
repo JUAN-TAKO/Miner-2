@@ -105,16 +105,15 @@ class Rule():
                 else:
                     ctx.active[id(self)] = ctx.offset
            
-        if id(self) in ctx.active:
+        if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
             stop = self.stop.eval(ctx)
-            if stop[0]:
+            if stop[0] and ctx.offset != ctx.active[id(self)]:
                 if self.stop.is_after():
                     ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
                 
                 del ctx.active[id(self)]
             else:
-                if ctx.offset >= ctx.active[id(self)]:
-                    ctx.output[name] += ctx.text[ctx.offset]
+                ctx.output[name] += ctx.text[ctx.offset]
         
 
 class Weight():

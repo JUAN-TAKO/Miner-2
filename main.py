@@ -1,6 +1,6 @@
 from lexer import Lexer
 from mparser import Parser, Context
-
+import rules
 program = """
 init a = 0, r = 0;
 
@@ -11,9 +11,13 @@ stop after <<[0-9]{5}>> set r=1
 store as 'Ref' weight 1;
 
 force 'started' to 'true' when a = 2 set a = 3;
+
+start after <<!>>
+stop when <<!>>
+store as '!' weight 1;
 """
 text = """
-ceci est un text de $test12345 fin.
+ceci !est! un text de $test12345 fin.
 """
 
 lexer = Lexer().get_lexer()
@@ -21,7 +25,7 @@ tokens = lexer.lex(program)
 
 context = Context(text)
 
-pg = Parser()
+pg = Parser(rules.regexes)
 pg.parse()
 parser = pg.get_parser()
 
