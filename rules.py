@@ -120,7 +120,7 @@ rules = {
     "dynaren_mail": [
         {
             "min_score": 19,
-            "max_score": 19,
+            "max_score": 27,
             "rules": """
                 init d=0,c=0;
                 force 'Assurance' to 'Dynaren';
@@ -134,6 +134,9 @@ rules = {
 
                 start after <<Assistance chez \:\$>>
                 stop after @$ store as 'Dossier' weight 5;
+
+                start after <<communiqué par l'assureur \: >>
+                stop after @$ store as 'Type' weight 5;
 
                 once after <<Libellé de la prise en charge >> set c=1;
                 
