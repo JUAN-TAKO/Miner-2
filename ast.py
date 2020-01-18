@@ -100,20 +100,35 @@ class Rule():
         if id(self) not in ctx.active:
             start = self.start.eval(ctx)
             if start[0]:
+                if name == "Ref":
+                    print("activate")
                 if self.start.is_after():
-                    ctx.active[id(self)] = start[1]
+                    ctx.active[id(self)] = ctx.offset + start[1]
                 else:
                     ctx.active[id(self)] = ctx.offset
-           
+
         if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
+            if name == "Ref":
+                print("c")
+            diff = ctx.offset - ctx.active[id(self)]
             stop = self.stop.eval(ctx)
-            if stop[0] and ctx.offset != ctx.active[id(self)]:
+            if stop[0]:
+                if name == "Ref":
+                    print("stop")
+                    print(stop[1])
+                del ctx.active[id(self)]
+
                 if self.stop.is_after():
                     ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
-                
-                del ctx.active[id(self)]
-            else:
-                ctx.output[name] += ctx.text[ctx.offset]
+                    return
+            
+                if diff > 0:
+                    if name == "Ref":
+                        print("return")
+                    return
+            if name == "Ref":
+                print("add")
+            ctx.output[name] += ctx.text[ctx.offset]
         
 
 class Weight():

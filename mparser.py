@@ -65,16 +65,16 @@ class Parser():
         @self.pg.production('force : FORCE STR TO STR delimitation or_condition set_vars')
         def force_cond(p):
             cond = Conditional(p[5], p[4], Weight(Number(0), p[6]))
-            return Force(p[3].getstr(), p[1].getstr(), cond)
+            return Force(p[3].getstr()[1:-1], p[1].getstr()[1:-1], cond)
 
         @self.pg.production('force : FORCE STR TO STR WEIGHT NBR delimitation or_condition set_vars')
         def force_cond_weight(p):
             cond = Conditional(p[7], p[6], Weight(Number(p[5].getstr()), p[8]))
-            return Force(p[3].getstr(), p[1].getstr(), cond)
+            return Force(p[3].getstr()[1:-1], p[1].getstr()[1:-1], cond)
 
         @self.pg.production('store : STORE AS STR WEIGHT NBR')
         def store(p):
-            return Store(p[2].getstr(), Number(p[4].getstr()))
+            return Store(p[2].getstr()[1:-1], Number(p[4].getstr()))
 
         @self.pg.production('delimitation : WHEN')
         @self.pg.production('delimitation : AFTER')

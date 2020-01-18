@@ -12,8 +12,8 @@ store as 'Ref' weight 1;
 
 force 'started' to 'true' when a = 2 set a = 3;
 
-start after <<!>>
-stop when <<!>>
+start after <<\$>>
+stop when <<5>>
 store as '!' weight 1;
 """
 text = """
