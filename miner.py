@@ -2,7 +2,9 @@ from lexer import Lexer
 from mparser import Parser, Context
 import rules
 import sys
-import fileinput
+import fileinput 
+import shlex
+import subprocess
 
 class Miner():
     def __init__(self):
@@ -70,3 +72,17 @@ class Miner():
             self.final_output.update(best_output)
         
         return self.final_output
+    
+    def pdf_to_json(self, file, programsets):
+        if not file.endswith(".pdf"):
+            raise Exception("Le fichier doit être un pdf")
+        
+        #check exists
+        pdf = open(file)
+        pdf.close()
+
+        escaped = shlex.quote(file)
+
+        text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True)
+
+        print(text)
