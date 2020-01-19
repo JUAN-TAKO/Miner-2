@@ -107,12 +107,12 @@ rules = {
                 stop when @$ set p=3
                 store as 'Adresse 1' weight 3;
 
-                start after p=4
-                stop after @code set p=5
+                start after p=3
+                stop after @code set p=4
                 store as 'Code' weight 3;
 
-                start after p=5 and @$
-                stop when @$ set p=6
+                start after p=4 and @$
+                stop when @$ set p=5
                 store as 'Ville' weight 3;
             """
         }
@@ -160,6 +160,60 @@ rules = {
                 start after <<dommages et/ou les prestations >>
                 stop when <<Veuillez noter les modalit>>
                 store as 'Observations' weight 5;
+            """
+        }
+    ],
+    "dynaren_address": [
+        {
+            "min_score": 15,
+            "max_score": 15,
+            "rules": """
+                init p=0;
+
+                once after <<Assistance chez \:\$>> set p=1;
+                once when p=1 and @$ set p=2;
+                
+                start after p=2
+                stop when @$ set p=3
+                store as 'Adresse 1' weight 3;
+
+                start after p=3
+                stop when @$ set p=4
+                store as 'Adresse 2' weight 3;
+                
+                start after p=4
+                stop after @code set p=5
+                store as 'Code' weight 3;
+
+                start after p=5
+                stop when @$ set p=6
+                store as 'Ville' weight 3;
+                
+                once when p=6 and <<Cordialement>> weight 3 set p=7;
+            """
+        },
+        {
+            "min_score": 12,
+            "max_score": 12,
+            "rules": """
+                init p=0;
+
+                once after <<Assistance chez \:\$>> set p=1;
+                once when p=1 and @$ set p=2;
+                
+                start after p=2
+                stop when @$ set p=3
+                store as 'Adresse 1' weight 3;
+                
+                start after p=3
+                stop after @code set p=4
+                store as 'Code' weight 3;
+
+                start after p=4
+                stop when @$ set p=5
+                store as 'Ville' weight 3;
+                
+                once when p=5 and <<Cordialement>> weight 3 set p=6;
             """
         }
     ]
