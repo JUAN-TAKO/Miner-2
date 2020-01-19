@@ -26,7 +26,7 @@ rules = {
 
                 start when d=0 and @date
                 stop after @date set d=1
-                store as 'Date1' weight 5
+                store as 'Date1' weight 5;
 
                 start when d=1 and @date
                 stop after @date set d=2
