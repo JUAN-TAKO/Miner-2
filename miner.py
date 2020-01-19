@@ -29,9 +29,9 @@ class Miner():
 
     @staticmethod
     def filter_text(text):
-        text.replace("\n", "$")
-        text.replace("\r", "$")
-        text.replace("\t", "$")
+        text = text.replace("\n", "$")
+        text = text.replace("\r", "$")
+        text = text.replace("\t", "$")
         clean = False
 
         while not clean:
@@ -85,8 +85,7 @@ class Miner():
         escaped = shlex.quote(file)
 
         text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True)
-
-        print(text)
+        text = str(text)
 
         if len(text) < 30:
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
