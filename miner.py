@@ -5,6 +5,7 @@ import sys
 import fileinput 
 import shlex
 import subprocess
+import json
 
 class Miner():
     def __init__(self):
@@ -75,7 +76,7 @@ class Miner():
     
     def pdf_to_json(self, file, programsets):
         if not file.endswith(".pdf"):
-            raise Exception("Le fichier doit être un pdf")
+            raise Exception("Le fichier doit être un pdf: " + file)
         
         #check exists
         pdf = open(file)
@@ -86,3 +87,10 @@ class Miner():
         text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True)
 
         print(text)
+
+        if len(text) < 30:
+            raise Exception('Le fichier est incorrect (trop petit): ' + file)
+        
+        data = self.mine(text, programsets)
+
+        return json.dumps(data)
