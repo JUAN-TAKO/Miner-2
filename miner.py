@@ -46,7 +46,7 @@ class Miner():
 
     def mine(self, text, programsets):
         text = Miner.filter_text(text)
-
+        print(text)
         for programset_name in programsets:
             programset = rules.rules[programset_name]
             best_score = 0

@@ -1,5 +1,5 @@
 regexes = {
-    "ref": "([0-9]{8}P[0-9] | [0-9]{10}P[0-9])",
+    "ref": "[0-9]{8,10}P[0-9]",
     "date": "[0-9]{2}/[0-9]{2}/[0-9]{4}",
     "code": "[0-9]{5}",
     "$" : "\$"
@@ -46,9 +46,10 @@ rules = {
                 store as 'Charges' weight 5;
 
                 start after d=3 and @$
-                stop when @$ store as 'Societaire' weight 5;
+                stop when @$ set d=4
+                store as 'Societaire' weight 5;
 
-                start after d=4
+                start after d=4 and @$
                 stop when @$ set d=5
                 store as 'Police' weight 5;
 
