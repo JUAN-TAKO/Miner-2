@@ -14,13 +14,13 @@ class And(BinaryOp):
     def eval(self, ctx):
         l = self.left.eval(ctx)
         r = self.right.eval(ctx)
-        return (l[0] and r[0], min(l[1], r[1]))
+        return (l[0] and r[0], max(l[1], r[1]))
 
 class Or(BinaryOp):
     def eval(self, ctx):
         l = self.left.eval(ctx)
         r = self.right.eval(ctx)
-        return (l[0] or r[0], max(l[1], r[1]))
+        return (l[0] or r[0], min(l[1], r[1]))
 
 class Not(UnaryOp):
     def eval(self, ctx):

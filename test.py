@@ -2,7 +2,7 @@ from lexer import Lexer
 from mparser import Parser, Context
 import rules
 program = """
-init a = 0, r = 0;
+init a = 0, r = 0, z=0;
 
 once after <<\$>> set a = 1;
 
@@ -12,12 +12,12 @@ store as 'Ref' weight 1;
 
 force 'started' to 'true' when a = 2 set a = 3;
 
-start after <<\$>>
-stop when <<5>>
+start after z=0 and @$
+stop when @$ set z=1
 store as '!' weight 1;
 """
 text = """
-ceci !est! un text de $test12345 fin.
+ceci $est$ un text de $test12345 fin.
 """
 
 lexer = Lexer().get_lexer()
