@@ -153,14 +153,11 @@ class Conditional():
     def eval(self, ctx):
         res = self.condition.eval(ctx) 
         if res[0]:
-            if self.delim:
-                off = ctx.offset + res[1]
-                if off not in ctx.triggers:
-                    ctx.triggers[off] = []
-                
-                ctx.triggers[off] += [self.weight]
-            else:
-                self.weight.eval(ctx)
+            off = ctx.offset + res[1]
+            if off not in ctx.triggers:
+                ctx.triggers[off] = []
+            
+            ctx.triggers[off] += [self.weight]
         return res
 
 class Force():
