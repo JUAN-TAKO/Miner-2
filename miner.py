@@ -32,23 +32,21 @@ class Miner():
         text = text.replace("\n", "$")
         text = text.replace("\r", "$")
         text = text.replace("\t", "$")
-        clean = False
+        text2 = ""
 
-        while not clean:
+        while text2 != text:
+
+            text2 = text
             text = text.replace("  ", "$")
             text = text.replace(" $", "$")
             text = text.replace("$ ", "$")
             text = text.replace("$$", "$")
 
-            clean = clean or text.find("  ") != -1
-            clean = clean or text.find(" $") != -1
-            clean = clean or text.find("$ ") != -1
-            clean = clean or text.find("$$") != -1
-
         return text
 
     def mine(self, text, programsets):
         text = Miner.filter_text(text)
+
         for programset_name in programsets:
             programset = rules.rules[programset_name]
             best_score = 0
@@ -66,8 +64,12 @@ class Miner():
                 if fscore is not None and fscore > best_score:
                     best_score = fscore
                     best_output = context.output
+                
+                for o, v in context.output.items():
+                    print(o + ": " + v)
             
             if best_output is None:
+
                 raise Exception("Impossible d'extraire les informations avec " + programset_name)
 
             self.final_output.update(best_output)
@@ -84,9 +86,8 @@ class Miner():
 
         escaped = shlex.quote(file)
 
-        text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True)
+        text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True, encoding='utf-8')
         text = str(text)
-
         if len(text) < 30:
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
