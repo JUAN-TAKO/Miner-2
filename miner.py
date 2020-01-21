@@ -46,7 +46,6 @@ class Miner():
 
     def mine(self, text, programsets):
         text = Miner.filter_text(text)
-        print(text)
         for programset_name in programsets:
             programset = rules.rules[programset_name]
             best_score = 0
@@ -59,14 +58,11 @@ class Miner():
                 for i in range(len(text)):
                     context.offset = i
                     ast.eval(context)
-                
+
                 fscore = Miner.score(context.score, context.matches, program["min_score"], program["max_score"])
                 if fscore is not None and fscore > best_score:
                     best_score = fscore
                     best_output = context.output
-                
-                for o, v in context.output.items():
-                    print(o + ": " + v)
             
             if best_output is None:
 
@@ -76,6 +72,16 @@ class Miner():
         
         return self.final_output
     
+    def filter_output(self, output):
+        
+        for k, v in output.items():
+            t = v.replace("N° Police", "")
+            t = t.strip("$")
+            t = t.strip()
+            t = t.replace("$", " ")
+
+            output[k] = t
+
     def pdf_to_json(self, file, programsets):
         if not file.endswith(".pdf"):
             raise Exception("Le fichier doit être un pdf: " + file)
@@ -92,5 +98,6 @@ class Miner():
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
         data = self.mine(text, programsets)
+        self.filter_output(data)
 
         return json.dumps(data)

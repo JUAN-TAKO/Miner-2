@@ -52,10 +52,10 @@ class Variable():
 
 class Number():
     def __init__(self, value):
-        self.value = value
+        self.value = int(value)
 
     def eval(self, ctx):
-        return int(self.value)
+        return self.value
 
 class Regex():
     def __init__(self, exp):
@@ -100,36 +100,27 @@ class Rule():
         if id(self) not in ctx.active:
             start = self.start.eval(ctx)
             if start[0]:
-                if name == "Ref":
-                    print("activate")
                 if self.start.is_after():
                     ctx.active[id(self)] = ctx.offset + start[1]
                 else:
                     ctx.active[id(self)] = ctx.offset
 
         if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
-            if name == "Ref":
-                print("c")
+
             diff = ctx.offset - ctx.active[id(self)]
             stop = self.stop.eval(ctx)
             if stop[0]:
-                if name == "Ref":
-                    print("stop")
-                    print(stop[1])
+                
                 del ctx.active[id(self)]
 
                 if self.stop.is_after():
                     ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
-                    return
-            
-                if diff > 0:
-                    if name == "Ref":
-                        print("return")
-                    return
-            if name == "Ref":
-                print("add")
+                    self.store.eval(ctx)
+                elif len(ctx.output[name]) > 0:
+                    self.store.eval(ctx)
+                return
+
             ctx.output[name] += ctx.text[ctx.offset]
-        
 
 class Weight():
     def __init__(self, weight, to_execute):
@@ -178,8 +169,8 @@ class Store():
     def get_name(self):
         return self.name
     
-    def get_weight(self):
-        return self.weight
+    def eval(self, ctx):
+        self.weight.eval(ctx)
 
 class Init():
     def __init__(self, assigns):

@@ -49,16 +49,12 @@ rules = {
                 stop when @$ set d=4
                 store as 'Societaire' weight 5;
 
-                start after d=4 and @$
+                start after d=4
                 stop when @$ set d=5
                 store as 'Police' weight 5;
 
                 start after <<Tél évènement \:>> 
-                stop when @$ set d=3 store as 'Tél ev' weight 1;
-
-                start after <<Tél évènement \:>> 
-                stop when @$ set d=3
-                store as 'Tél ev' weight 1;
+                stop when @$ store as 'Tél ev' weight 1;
 
                 start after <<Portable \:>> 
                 stop when @$ set t=1
@@ -87,7 +83,7 @@ rules = {
                 stop when @$ set p=4
                 store as 'Adresse 2' weight 3;
 
-                start after p=4
+                start when p=4 and @code
                 stop after @code set p=5
                 store as 'Code' weight 3;
 
@@ -108,7 +104,7 @@ rules = {
                 stop when @$ set p=3
                 store as 'Adresse 1' weight 3;
 
-                start after p=3
+                start when p=3 and @code
                 stop after @code set p=4
                 store as 'Code' weight 3;
 

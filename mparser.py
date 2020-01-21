@@ -74,7 +74,7 @@ class Parser():
 
         @self.pg.production('store : STORE AS STR WEIGHT NBR')
         def store(p):
-            return Store(p[2].getstr()[1:-1], Number(p[4].getstr()))
+            return Store(p[2].getstr()[1:-1], Weight(Number(p[4].getstr()), Nop()))
 
         @self.pg.production('delimitation : WHEN')
         @self.pg.production('delimitation : AFTER')
