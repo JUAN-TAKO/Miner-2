@@ -115,7 +115,7 @@ rules = {
             """
         }
     ],
-    "dynaren_mail": [
+    "dynaren_main": [
         {
             "min_score": 14,
             "max_score": 22,
@@ -137,7 +137,7 @@ rules = {
                 store as 'Type' weight 5;
 
                 start when d=1 and @date
-                stop when @date set d=2
+                stop after @date set d=2
                 store as 'Date' weight 5;
 
                 start after <<Dommages déclarés \:>>
