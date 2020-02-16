@@ -117,8 +117,8 @@ rules = {
     ],
     "dynaren_main": [
         {
-            "min_score": 14,
-            "max_score": 22,
+            "min_score": 20,
+            "max_score": 20,
             "rules": """
                 init d=0,c=0;
                 force 'Assurance' to 'Dynaren';
@@ -142,39 +142,29 @@ rules = {
 
                 start after <<Dommages déclarés \:>>
                 stop when @$ store as 'Observations' weight 5;
-
-                start when @tel
-                stop when @tel store as 'Tél ev' weight 2;
             """
         }
     ],
     "dynaren_address": [
         {
-            "min_score": 15,
-            "max_score": 15,
+            "min_score": 9,
+            "max_score": 9,
             "rules": """
-                init p=0;
+                init a=0;
 
-                once after <<Assistance chez \:\$>> set p=1;
-                once when p=1 and @$ set p=2;
+                once after <<Lieu du sinistre \: >> set a=1;
                 
-                start after p=2
-                stop when @$ set p=3
+                start after a=1
+                stop when @code set a=2
                 store as 'Adresse 1' weight 3;
-
-                start after p=3
-                stop when @$ set p=4
-                store as 'Adresse 2' weight 3;
                 
-                start after p=4
-                stop after @code set p=5
+                start when a=2 and @code
+                stop after @code set a=3
                 store as 'Code' weight 3;
 
-                start after p=5
-                stop when @$ set p=6
+                start after a=3
+                stop when @$ set a=4
                 store as 'Ville' weight 3;
-                
-                once when p=6 and <<Cordialement>> weight 3 set p=7;
             """
         }
     ],
