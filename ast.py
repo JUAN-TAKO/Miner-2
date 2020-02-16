@@ -161,6 +161,13 @@ class Force():
         if self.conditional.eval(ctx)[0]:
             ctx.output[self.dest] = self.source
 
+class BooleanCond():
+    def __init__(self, val):
+        self.val = val
+    
+    def eval(self, ctx):
+        return (self.val, 0)
+
 class Store():
     def __init__(self, name, weight):
         self.name = name

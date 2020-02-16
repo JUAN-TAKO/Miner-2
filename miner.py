@@ -6,6 +6,7 @@ import fileinput
 import shlex
 import subprocess
 import json
+import rply
 
 class Miner():
     def __init__(self):
@@ -52,7 +53,15 @@ class Miner():
             best_output = None
             for program in programset:
                 tokens = self.lexer.lex(program["rules"])
-                ast = self.parser.parse(tokens)
+                try:
+                    ast = self.parser.parse(tokens)
+                except Exception as e:
+                    lpos = e.getsourcepos().lineno
+                    cpos = e.getsourcepos().colno
+                    line = program["rules"].splitlines()[lpos-1]
+                    cursor = " " * cpos + "^"
+                    raise Exception("Parsing error: " + str(e) + "\nat :\n\"" + line + "\"\n" + cursor)
+
                 context = Context(text)
 
                 for i in range(len(text)):
@@ -60,6 +69,8 @@ class Miner():
                     ast.eval(context)
 
                 fscore = Miner.score(context.score, context.matches, program["min_score"], program["max_score"])
+
+                print(context.output)
                 if fscore is not None and fscore > best_score:
                     best_score = fscore
                     best_output = context.output
@@ -82,6 +93,17 @@ class Miner():
 
             output[k] = t
 
+    def text_to_json(self, text, programsets):
+        text = str(text)
+
+        if len(text) < 100:
+            raise Exception('Le fichier est incorrect (trop petit): ' + file)
+        
+        data = self.mine(text, programsets)
+        self.filter_output(data)
+
+        return json.dumps(data)
+
     def pdf_to_json(self, file, programsets):
         if not file.endswith(".pdf"):
             raise Exception("Le fichier doit être un pdf: " + file)
@@ -93,11 +115,5 @@ class Miner():
         escaped = shlex.quote(file)
 
         text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True, encoding='utf-8')
-        text = str(text)
-        if len(text) < 30:
-            raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
-        data = self.mine(text, programsets)
-        self.filter_output(data)
-
-        return json.dumps(data)
+        return text_to_json(text, programsets)

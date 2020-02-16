@@ -2,6 +2,7 @@ regexes = {
     "ref": "[0-9]{8,10}P[0-9]",
     "date": "[0-9]{2}/[0-9]{2}/[0-9]{4}",
     "code": "[0-9]{5}",
+    "tel": "[0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2} [0-9]{2}",
     "$" : "\$"
 }
 
@@ -116,6 +117,69 @@ rules = {
     ],
     "dynaren_mail": [
         {
+            "min_score": 14,
+            "max_score": 22,
+            "rules": """
+                init d=0,c=0;
+                force 'Assurance' to 'Dynaren';
+
+                start after <<N° sinistre \: >>
+                stop when @$ store as 'Ref' weight 5;
+
+                start after <<Assuré \: Madame >>
+                stop after @$ store as 'Dossier' weight 5;
+
+                start after <<Assuré \: Monsieur >>
+                stop after @$ store as 'Dossier' weight 5;
+
+                start after d=0 and <<Nature du sinistre \: >>
+                stop when << du >> set d=1 
+                store as 'Type' weight 5;
+
+                start when d=1 and @date
+                stop when @date set d=2
+                store as 'Date' weight 5;
+
+                start after <<Dommages déclarés \:>>
+                stop when @$ store as 'Observations' weight 5;
+
+                start when @tel
+                stop when @tel store as 'Tél ev' weight 2;
+            """
+        }
+    ],
+    "dynaren_address": [
+        {
+            "min_score": 15,
+            "max_score": 15,
+            "rules": """
+                init p=0;
+
+                once after <<Assistance chez \:\$>> set p=1;
+                once when p=1 and @$ set p=2;
+                
+                start after p=2
+                stop when @$ set p=3
+                store as 'Adresse 1' weight 3;
+
+                start after p=3
+                stop when @$ set p=4
+                store as 'Adresse 2' weight 3;
+                
+                start after p=4
+                stop after @code set p=5
+                store as 'Code' weight 3;
+
+                start after p=5
+                stop when @$ set p=6
+                store as 'Ville' weight 3;
+                
+                once when p=6 and <<Cordialement>> weight 3 set p=7;
+            """
+        }
+    ],
+    "dynaren_mail_old": [
+        {
             "min_score": 19,
             "max_score": 27,
             "rules": """
@@ -146,13 +210,13 @@ rules = {
                 store as 'Charges' weight 5;
 
                 start after <<N° tél fixe \:>>
-                stop when @$ set store as 'Tél ev' weight 2;
+                stop when @$ store as 'Tél ev' weight 2;
 
                 start after <<N° téléphone portable \: >>
-                stop when @$ set store as 'Portable' weight 2;
+                stop when @$ store as 'Portable' weight 2;
 
                 start after <<N° téléphone portable \:\$>>
-                stop when @$ set store as 'Portable' weight 2;
+                stop when @$ store as 'Portable' weight 2;
 
                 start after <<dommages et/ou les prestations >>
                 stop when <<Veuillez noter les modalit>>
@@ -160,7 +224,7 @@ rules = {
             """
         }
     ],
-    "dynaren_address": [
+    "dynaren_address_old": [
         {
             "min_score": 15,
             "max_score": 15,

@@ -2,7 +2,7 @@ from lexer import Lexer
 from rply import ParserGenerator
 from ast import And, Or, Not, Assign, Rule, Weight
 from ast import AssignList, Variable, Program
-from ast import Number, Regex, Compare, Nop
+from ast import Number, Regex, Compare, Nop, BooleanCond
 from ast import Conditional, Store, Force, Init
 
 class Context():
@@ -62,6 +62,10 @@ class Parser():
         def once_weight(p):
             return Conditional(p[2], p[1], Weight(Number(p[4].getstr()), p[5]))
 
+        @self.pg.production('force : FORCE STR TO STR')
+        def force(p):
+            return Force(p[3].getstr()[1:-1], p[1].getstr()[1:-1], BooleanCond(True))
+        
         @self.pg.production('force : FORCE STR TO STR delimitation or_condition set_vars')
         def force_cond(p):
             cond = Conditional(p[5], p[4], Weight(Number(0), p[6]))
@@ -141,7 +145,4 @@ class Parser():
         def assign(p):
             return Assign(Variable(p[0].getstr()), Number(p[2].getstr()))
         
-        @self.pg.error
-        def error_handle(token):
-            raise ValueError(token)
-        
+    
