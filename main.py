@@ -12,13 +12,14 @@ def mine_pdf(args):
             text = f.read()
             f.close()
             json = m.text_to_json(text, ['dynaren_mail', 'dynaren_address'])
-        print("[" + str(idx) + "] " + file + ": SUCCESS")
+        print("\n\n[" + str(idx) + "] " + file + ": SUCCESS\n")
+        print(json)
     except Exception as e:
-        print("[" + str(idx) + "] " + file + ": FAILED")
+        print("[" + str(idx) + "] " + file + ": FAILED\n")
         print(e)
 
 
-pool = ThreadPool(4)
+pool = ThreadPool(1)
 
 miner = Miner()
 

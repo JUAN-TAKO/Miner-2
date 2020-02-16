@@ -178,7 +178,7 @@ rules = {
             """
         }
     ],
-    "dynaren_mail_old": [
+    "fidelia_dynaren_mail": [
         {
             "min_score": 19,
             "max_score": 27,
@@ -224,7 +224,7 @@ rules = {
             """
         }
     ],
-    "dynaren_address_old": [
+    "fidelia_dynaren_address": [
         {
             "min_score": 15,
             "max_score": 15,
@@ -242,7 +242,7 @@ rules = {
                 stop when @$ set p=4
                 store as 'Adresse 2' weight 3;
                 
-                start after p=4
+                start when p=4 and @code
                 stop after @code set p=5
                 store as 'Code' weight 3;
 
@@ -266,7 +266,7 @@ rules = {
                 stop when @$ set p=3
                 store as 'Adresse 1' weight 3;
                 
-                start after p=3
+                start when p=3 and @code
                 stop after @code set p=4
                 store as 'Code' weight 3;
 
