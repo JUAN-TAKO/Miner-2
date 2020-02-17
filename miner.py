@@ -69,7 +69,7 @@ class Miner():
                     context.offset = i
                     context.changed = True
                     while context.changed:
-                        if j > 4:
+                        if j >= 3:
                             break
                         context.changed = False
                         ast.eval(context)

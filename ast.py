@@ -29,7 +29,12 @@ class Not(UnaryOp):
 
 class Assign(BinaryOp):
     def eval(self, ctx):
-        ctx.variables[self.left.get_name()] = self.right.eval(ctx)
+        r = self.right.eval(ctx)
+        if ctx.variables[self.left.get_name()] != r:
+            ctx.changed = True
+        
+        ctx.variables[self.left.get_name()] = r
+        
         return 0
 
 class AssignList():
@@ -106,14 +111,10 @@ class Rule():
                     ctx.active[id(self)] = ctx.offset
 
         if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
-            if ctx.offset == ctx.active[id(self)]:
-                ctx.changed = True
             
             diff = ctx.offset - ctx.active[id(self)]
             stop = self.stop.eval(ctx)
             if stop[0]:
-
-                ctx.changed = True
 
                 del ctx.active[id(self)]
 
