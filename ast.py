@@ -115,12 +115,14 @@ class Rule():
 
                 if self.stop.is_after():
                     ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
+                    ctx.changed = True
                     self.store.eval(ctx)
                 elif len(ctx.output[name]) > 0:
                     self.store.eval(ctx)
                 return
 
             ctx.output[name] += ctx.text[ctx.offset]
+            ctx.changed = True
 
 class Weight():
     def __init__(self, weight, to_execute):

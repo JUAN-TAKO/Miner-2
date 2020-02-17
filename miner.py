@@ -65,8 +65,14 @@ class Miner():
                 context = Context(text)
 
                 for i in range(len(text)):
+                    j = 0
                     context.offset = i
-                    ast.eval(context)
+                    while context.changed:
+                        if j > 50:
+                            raise Exception("halts")
+                        context.changed = False
+                        ast.eval(context)
+
 
                 fscore = Miner.score(context.score, context.matches, program["min_score"], program["max_score"])
 

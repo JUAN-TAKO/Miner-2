@@ -154,7 +154,7 @@ rules = {
 
                 once after <<Lieu du sinistre \: >> set a=1;
                 
-                start after a=1
+                start when a=1
                 stop when @code set a=2
                 store as 'Adresse 1' weight 3;
                 
