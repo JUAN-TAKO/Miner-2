@@ -155,7 +155,7 @@ rules = {
                 once after <<Lieu du sinistre \: >> set a=1;
                 
                 start when a=1
-                stop when @code set a=2
+                stop when << [0-9]{5}>> set a=2
                 store as 'Adresse 1' weight 3;
                 
                 start when a=2 and @code
