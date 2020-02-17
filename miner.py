@@ -67,6 +67,7 @@ class Miner():
                 for i in range(len(text)):
                     j = 0
                     context.offset = i
+                    context.changed = True
                     while context.changed:
                         if j > 50:
                             raise Exception("halts")
