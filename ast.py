@@ -30,8 +30,9 @@ class Not(UnaryOp):
 class Assign(BinaryOp):
     def eval(self, ctx):
         r = self.right.eval(ctx)
-        if ctx.variables[self.left.get_name()] != r:
-            ctx.changed = True
+        if self.left.get_name() in ctx.variables:
+            if ctx.variables[self.left.get_name()] != r:
+                ctx.changed = True
         
         ctx.variables[self.left.get_name()] = r
         
