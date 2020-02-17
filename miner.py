@@ -69,8 +69,8 @@ class Miner():
                     context.offset = i
                     context.changed = True
                     while context.changed:
-                        if j > 50:
-                            raise Exception("halts")
+                        if j > 4:
+                            break
                         context.changed = False
                         ast.eval(context)
                         j+=1
