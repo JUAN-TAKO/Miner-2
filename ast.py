@@ -106,23 +106,25 @@ class Rule():
                     ctx.active[id(self)] = ctx.offset
 
         if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
-
+            if ctx.offset == ctx.active[id(self)]:
+                ctx.changed = True
+            
             diff = ctx.offset - ctx.active[id(self)]
             stop = self.stop.eval(ctx)
             if stop[0]:
-                
+
+                ctx.changed = True
+
                 del ctx.active[id(self)]
 
                 if self.stop.is_after():
                     ctx.output[name] += ctx.text[ctx.offset:ctx.offset + stop[1]]
-                    ctx.changed = True
                     self.store.eval(ctx)
                 elif len(ctx.output[name]) > 0:
                     self.store.eval(ctx)
                 return
 
             ctx.output[name] += ctx.text[ctx.offset]
-            ctx.changed = True
 
 class Weight():
     def __init__(self, weight, to_execute):

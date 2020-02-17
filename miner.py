@@ -73,6 +73,7 @@ class Miner():
                             raise Exception("halts")
                         context.changed = False
                         ast.eval(context)
+                        j+=1
 
 
                 fscore = Miner.score(context.score, context.matches, program["min_score"], program["max_score"])
