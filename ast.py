@@ -31,7 +31,6 @@ class Assign(BinaryOp):
     def eval(self, ctx):
         r = self.right.eval(ctx)
         ctx.variables[self.left.get_name()] = r
-        
         return 0
 
 class AssignList():
@@ -83,6 +82,7 @@ class Program():
         if ctx.offset in ctx.triggers:
             for to_exec in ctx.triggers[ctx.offset]:
                 to_exec.eval(ctx)
+        
         self.rule.eval(ctx)
         self.next_p.eval(ctx)
 
@@ -108,8 +108,7 @@ class Rule():
                     ctx.active[id(self)] = ctx.offset
 
         if id(self) in ctx.active and ctx.offset >= ctx.active[id(self)]:
-            
-            diff = ctx.offset - ctx.active[id(self)]
+
             stop = self.stop.eval(ctx)
             if stop[0]:
 
@@ -146,11 +145,14 @@ class Conditional():
     def eval(self, ctx):
         res = self.condition.eval(ctx) 
         if res[0]:
-            off = ctx.offset + res[1]
-            if off not in ctx.triggers:
-                ctx.triggers[off] = []
-            
-            ctx.triggers[off] += [self.weight]
+            if self.delim:
+                off = ctx.offset + res[1]
+                if off not in ctx.triggers:
+                    ctx.triggers[off] = []
+                
+                ctx.triggers[off] += [self.weight]
+            else:
+                self.weight.eval(ctx)
         return res
 
 class Force():

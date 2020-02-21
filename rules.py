@@ -155,10 +155,10 @@ rules = {
                 once after <<Lieu du sinistre \: >> set a=1;
                 
                 start when a=1
-                stop when @code
+                stop when @code set a=2
                 store as 'Adresse 1' weight 3;
                 
-                start when a=0 and @code
+                start when a=2 and @code
                 stop after @code set a=3
                 store as 'Code' weight 3;
 

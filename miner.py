@@ -117,4 +117,4 @@ class Miner():
 
         text = subprocess.check_output('pdftotext -layout -enc UTF-8 ' + escaped + ' -', shell=True, encoding='utf-8')
         
-        return text_to_json(text, programsets)
+        return self.text_to_json(text, programsets)

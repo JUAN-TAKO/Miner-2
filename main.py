@@ -11,6 +11,7 @@ def mine_pdf(args):
             f = open(file)
             text = f.read()
             f.close()
+            print(text)
             json = m.text_to_json(text, ['dynaren_main', 'dynaren_address'])
         print("\n\n[" + str(idx) + "] " + file + ": SUCCESS\n")
         print(json)
@@ -23,12 +24,12 @@ pool = ThreadPool(1)
 
 miner = Miner()
 
-os.chdir("pdfs/dynaren")
+os.chdir("pdfs/hsvm")
 i = 0
 params = []
-for file in glob.glob("*.txt"):
+for file in glob.glob("*.pdf"):
     i+=1
-    params.append((i, miner, file, False))
+    params.append((i, miner, file, True))
     
 pool.map(mine_pdf, params)
 #print(json)
