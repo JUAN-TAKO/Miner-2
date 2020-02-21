@@ -11,7 +11,7 @@ def mine_pdf(args):
             f = open(file)
             text = f.read()
             f.close()
-            print(text)
+            #print(text)
             json = m.text_to_json(text, ['dynaren_main', 'dynaren_address'])
         print("\n\n[" + str(idx) + "] " + file + ": SUCCESS\n")
         print(json)

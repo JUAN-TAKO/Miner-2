@@ -46,7 +46,6 @@ class Miner():
         return text
 
     def mine(self, text, programsets):
-        text = Miner.filter_text(text)
         for programset_name in programsets:
             programset = rules.rules[programset_name]
             best_score = 0
@@ -71,7 +70,6 @@ class Miner():
 
                 fscore = Miner.score(context.score, context.matches, program["min_score"], program["max_score"])
 
-                print(context.output)
                 if fscore is not None and fscore > best_score:
                     best_score = fscore
                     best_output = context.output
@@ -95,11 +93,12 @@ class Miner():
             output[k] = t
 
     def text_to_json(self, text, programsets):
-        text = str(text)
+        text = text = Miner.filter_text(str(text))
 
         if len(text) < 100:
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
+        print(text)
         data = self.mine(text, programsets)
         self.filter_output(data)
 
