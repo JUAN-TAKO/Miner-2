@@ -347,7 +347,7 @@ rules = {
             """
         }
     ],
-    "filassistance_address": [
+    "filassistance_header_address": [
         {
             "min_score": 12,
             "max_score": 12,
@@ -389,6 +389,53 @@ rules = {
 
                 start when p=4 stop after @$ set p=5
                 store as "Ville" weight 3;
+            """
+        }
+    ],
+    "homeserve": [
+        {
+            "min_score": 37,
+            "max_score": 43,
+            "rules": """
+                init d=0;
+                force "Assurance" to "HomeServe";
+                
+                start after <<N°>>
+                stop when @$
+                store as "Ref" weight 5;
+
+                start after d=0 and <<Date \: >>
+                stop after @date set d=1
+                store as "Date" weight 5;
+
+                start after <<et NOM \: >>
+                stop when @$ store as "Dossier" weight 5;
+
+                start after <<contrat client \:\$>>
+                stop when @$ store as "Type" weight 5;
+
+                start after <<Coût de l'intervention\$>>
+                stop when <<\$Montant>>
+                store as "Charges" weight 5;
+
+                start after <<Tél. Domicile \:>>
+                stop when @$ store as "Tél ev" weight 1;
+
+                start after <<Tél. Portable \:>>
+                stop when @$ store as "Tél portable" weight 1;
+
+                start after <<Détails \: >>
+                stop when @$
+                store as "Observations" weight 1;
+
+                start after <<Adresse \: >>
+                stop when @$ store as "Adresse 1" weight 5;
+
+                start after <<CP \: >>
+                stop when @$ store as "Code" weight 5;
+
+                start after <<Ville \: >>
+                stop when @$ store as "Ville" weight 5;
             """
         }
     ]
