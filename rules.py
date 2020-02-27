@@ -279,37 +279,37 @@ rules = {
                 once after f=1 and @$ set f=2;
                 once after f=2 and @$ set f=3;
                 start after f=3
-                stop when @$ store as "Assurance" weight 0;
+                stop when @$ store as 'Assurance' weight 0;
 
                 start after <<Numéro de dossier \:\$>>
-                stop when @$ store as "Ref" weight 5;
+                stop when @$ store as 'Ref' weight 5;
 
                 once when d=0 and <<Planning d'intervention>> set d=1;
                 once when d=1 and <<pour le>> set d=2;
 
                 start when d=2 and @date
                 stop after @date set d=3
-                store as "Date" weight 5;
+                store as 'Date' weight 5;
 
                 start after <<Bénéficiaire \:\$>>
-                stop when @$ store as "Dossier" weight 5;
+                stop when @$ store as 'Dossier' weight 5;
 
                 start after <<mission suivante \:\$>>
-                stop when @$ store as "Type" weight 5;
+                stop when @$ store as 'Type' weight 5;
 
                 once after c=0 and <<Total\$MISSION\$>> set c=1;
                 once after c=1 and @$ set c=2;
 
                 start after c=1
                 stop when @$ set c=2
-                store as "Charges" weight 5;
+                store as 'Charges' weight 5;
 
                 start after <<Téléphone (principal) \:>>
-                stop when @$ store as "Tél ev" weight 2;
+                stop when @$ store as 'Tél ev' weight 2;
 
                 start after <<Observations \:\$>>
                 stop when <<RECAPITULATIF>>
-                store as "Observations" weight 2; 
+                store as 'Observations' weight 2; 
                 
             """
         },
@@ -323,26 +323,26 @@ rules = {
                 once after f=1 and @$ set f=2;
                 once after f=2 and @$ set f=3;
                 start after f=3
-                stop when @$ store as "Assurance" weight 0;
+                stop when @$ store as 'Assurance' weight 0;
 
                 start after <<Numéro de dossier \:\$>>
-                stop when @$ store as "Ref" weight 5;
+                stop when @$ store as 'Ref' weight 5;
 
                 once when d=0 and <<Planning d'intervention>> set d=1;
                 once when d=1 and <<pour le>> set d=2;
 
                 start when d=2 and @date
                 stop after @date set d=3
-                store as "Date" weight 5;
+                store as 'Date' weight 5;
 
                 start after <<Bénéficiaire \:\$>>
-                stop when @$ store as "Dossier" weight 5;
+                stop when @$ store as 'Dossier' weight 5;
 
                 start after <<mission suivante \:\$>>
-                stop when @$ store as "Type" weight 5;
+                stop when @$ store as 'Type' weight 5;
                 
                 start after <<Téléphone (principal) \:>>
-                stop when @$ store as "Tél ev" weight 2;
+                stop when @$ store as 'Tél ev' weight 2;
 
             """
         }
@@ -358,17 +358,17 @@ rules = {
                 once after @$ set p=2
 
                 start when p=2 stop after <<\, >> set p=3;
-                store as "Adresse 1" weight 3;
+                store as 'Adresse 1' weight 3;
 
                 start when p=3 stop after @$ set p=4;
-                store as "Adresse 2" weight 3;
+                store as 'Adresse 2' weight 3;
 
                 start when p=4 and @code
                 stop after @code set p=5
-                store as "Code" weight 3;
+                store as 'Code' weight 3;
 
                 start when p=5 stop after @$ set p=6
-                store as "Ville" weight 3;
+                store as 'Ville' weight 3;
             """
         },
         {
@@ -381,14 +381,14 @@ rules = {
                 once after @$ set p=2
 
                 start when p=2 stop after @$ set p=3;
-                store as "Adresse 1" weight 3;
+                store as 'Adresse 1' weight 3;
 
                 start when p=3 and @code
                 stop after @code set p=4
-                store as "Code" weight 3;
+                store as 'Code' weight 3;
 
                 start when p=4 stop after @$ set p=5
-                store as "Ville" weight 3;
+                store as 'Ville' weight 3;
             """
         }
     ],
@@ -397,45 +397,45 @@ rules = {
             "min_score": 37,
             "max_score": 43,
             "rules": """
-                init d=0;
-                force "Assurance" to "HomeServe";
-                
-                start after <<N°>>
-                stop when @$
-                store as "Ref" weight 5;
+                init d=0, n=0;
+                force 'Assurance' to 'HomeServe';
+
+                start after <<N°>> and n=0
+                stop when @$ set n=1
+                store as 'Ref' weight 5;
 
                 start after d=0 and <<Date \: >>
                 stop after @date set d=1
-                store as "Date" weight 5;
+                store as 'Date' weight 5;
 
                 start after <<et NOM \: >>
-                stop when @$ store as "Dossier" weight 5;
+                stop when @$ store as 'Dossier' weight 5;
 
-                start after <<contrat client \:\$>>
-                stop when @$ store as "Type" weight 5;
+                start after <<Contrat client \: >>
+                stop when @$ store as 'Type' weight 5;
 
-                start after <<Coût de l'intervention\$>>
-                stop when <<\$Montant>>
-                store as "Charges" weight 5;
+                start after <<Coût de l’intervention>>
+                stop when <<\$En cas>>
+                store as 'Charges' weight 5;
 
                 start after <<Tél. Domicile \:>>
-                stop when @$ store as "Tél ev" weight 1;
+                stop when @$ store as 'Tél ev' weight 1;
 
-                start after <<Tél. Portable \:>>
-                stop when @$ store as "Tél portable" weight 1;
+                start after <<Tél. portable \:>>
+                stop when @$ store as 'Tél portable' weight 1;
 
                 start after <<Détails \: >>
                 stop when @$
-                store as "Observations" weight 1;
+                store as 'Observations' weight 1;
 
                 start after <<Adresse \: >>
-                stop when @$ store as "Adresse 1" weight 5;
+                stop when @$ store as 'Adresse 1' weight 5;
 
-                start after <<CP \: >>
-                stop when @$ store as "Code" weight 5;
+                start after <<CP \:\$>>
+                stop when @$ store as 'Code' weight 5;
 
                 start after <<Ville \: >>
-                stop when @$ store as "Ville" weight 5;
+                stop when @$ store as 'Ville' weight 5;
             """
         }
     ]

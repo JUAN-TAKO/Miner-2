@@ -52,6 +52,7 @@ class Miner():
             best_output = None
             for program in programset:
                 tokens = self.lexer.lex(program["rules"])
+            
                 try:
                     ast = self.parser.parse(tokens)
                 except Exception as e:
@@ -98,7 +99,6 @@ class Miner():
         if len(text) < 100:
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
-        print(text)
         data = self.mine(text, programsets)
         self.filter_output(data)
 

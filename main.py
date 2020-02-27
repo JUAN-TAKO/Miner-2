@@ -6,7 +6,7 @@ def mine_pdf(args):
     (idx, m, file, is_pdf) = args
     try:
         if is_pdf:
-            json = m.pdf_to_json(file, ['pdf_main', 'pdf_address'])
+            json = m.pdf_to_json(file, ['homeserve'])
         else:
             f = open(file)
             text = f.read()
