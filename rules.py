@@ -50,7 +50,7 @@ rules = {
                 stop when @$ set d=4
                 store as 'Societaire' weight 5;
 
-                start after d=4
+                start after d=4 and @$
                 stop when @$ set d=5
                 store as 'Police' weight 5;
 
@@ -278,18 +278,16 @@ rules = {
                 once after f=0 and <<\$Fax\ :>> set f=1;
                 once after f=1 and @$ set f=2;
                 once after f=2 and @$ set f=3;
-                start after f=3
-                stop when @$ store as 'Assurance' weight 0;
+                start after f=3 and @$
+                stop when @$ set f=4
+                store as 'Assurance' weight 0;
+
+                start after f=4 and <<\, le >>
+                stop when @$ set f=5
+                store as 'Date' weight 5;
 
                 start after <<Numéro de dossier \:\$>>
                 stop when @$ store as 'Ref' weight 5;
-
-                once when d=0 and <<Planning d'intervention>> set d=1;
-                once when d=1 and <<pour le>> set d=2;
-
-                start when d=2 and @date
-                stop after @date set d=3
-                store as 'Date' weight 5;
 
                 start after <<Bénéficiaire \:\$>>
                 stop when @$ store as 'Dossier' weight 5;
@@ -322,18 +320,17 @@ rules = {
                 once after f=0 and <<\$Fax\ :>> set f=1;
                 once after f=1 and @$ set f=2;
                 once after f=2 and @$ set f=3;
-                start after f=3
-                stop when @$ store as 'Assurance' weight 0;
+                start after f=3 and @$
+                stop when @$ set f=4
+                store as 'Assurance' weight 0;
+
+                start after f=4 and <<\, le >>
+                stop when @$ set f=5
+                store as 'Date' weight 5;
 
                 start after <<Numéro de dossier \:\$>>
                 stop when @$ store as 'Ref' weight 5;
 
-                once when d=0 and <<Planning d'intervention>> set d=1;
-                once when d=1 and <<pour le>> set d=2;
-
-                start when d=2 and @date
-                stop after @date set d=3
-                store as 'Date' weight 5;
 
                 start after <<Bénéficiaire \:\$>>
                 stop when @$ store as 'Dossier' weight 5;
@@ -355,12 +352,13 @@ rules = {
                 init p=0;
 
                 once after <<Bénéficiaire \:\$>> set p=1;
-                once after @$ set p=2
+                once after p=1 and @$ set p=2;
 
-                start when p=2 stop after <<\, >> set p=3;
+                start when p=2
+                stop after <<\, >> set p=3
                 store as 'Adresse 1' weight 3;
 
-                start when p=3 stop after @$ set p=4;
+                start when p=3 stop after @$ set p=4
                 store as 'Adresse 2' weight 3;
 
                 start when p=4 and @code
@@ -378,9 +376,9 @@ rules = {
                 init p=0;
 
                 once after <<Bénéficiaire \:\$>> set p=1;
-                once after @$ set p=2
+                once after p=1 and @$ set p=2;
 
-                start when p=2 stop after @$ set p=3;
+                start when p=2 stop after @$ set p=3
                 store as 'Adresse 1' weight 3;
 
                 start when p=3 and @code

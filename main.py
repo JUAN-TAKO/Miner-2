@@ -6,7 +6,7 @@ def mine_pdf(args):
     (idx, m, file, is_pdf) = args
     try:
         if is_pdf:
-            json = m.pdf_to_json(file, ['homeserve'])
+            json = m.pdf_to_json(file, ['filassistance_header', "filassistance_header_address"])
         else:
             f = open(file)
             text = f.read()
@@ -24,7 +24,7 @@ pool = ThreadPool(1)
 
 miner = Miner()
 
-os.chdir("pdfs/hsvm")
+os.chdir("pdfs/filassistance/header")
 i = 0
 params = []
 for file in glob.glob("*.pdf"):

@@ -45,7 +45,9 @@ class Miner():
 
         return text
 
-    def mine(self, text, programsets):
+    def mine(self, text, programsets, debug=False):
+        if debug:
+            print(text)
         for programset_name in programsets:
             programset = rules.rules[programset_name]
             best_score = 0
@@ -74,6 +76,9 @@ class Miner():
                 if fscore is not None and fscore > best_score:
                     best_score = fscore
                     best_output = context.output
+                
+                if debug:
+                    print(context.output)
             
             if best_output is None:
 
@@ -99,7 +104,7 @@ class Miner():
         if len(text) < 100:
             raise Exception('Le fichier est incorrect (trop petit): ' + file)
         
-        data = self.mine(text, programsets)
+        data = self.mine(text, programsets, True)
         self.filter_output(data)
 
         return json.dumps(data)
