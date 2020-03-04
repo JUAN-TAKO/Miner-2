@@ -12,7 +12,7 @@ def mine_pdf(args):
             text = f.read()
             f.close()
             #print(text)
-            json = m.text_to_json(text, ['dynaren_main', 'dynaren_address'])
+            json = m.text_to_json(text, ['fidelia_dynaren_mail', 'fidelia_dynaren_address'])
         print("\n\n[" + str(idx) + "] " + file + ": SUCCESS\n")
         print(json)
     except Exception as e:
@@ -24,12 +24,12 @@ pool = ThreadPool(1)
 
 miner = Miner()
 
-os.chdir("pdfs/filassistance/header")
+os.chdir("pdfs/fidaren")
 i = 0
 params = []
-for file in glob.glob("*.pdf"):
+for file in glob.glob("*.txt"):
     i+=1
-    params.append((i, miner, file, True))
+    params.append((i, miner, file, False))
     
 pool.map(mine_pdf, params)
 #print(json)

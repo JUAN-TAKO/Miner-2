@@ -184,7 +184,7 @@ rules = {
                 store as 'Date' weight 5;
 
                 start after <<Assistance chez \:\$>>
-                stop after @$ store as 'Dossier' weight 5;
+                stop when @$ store as 'Dossier' weight 5;
 
                 start after <<communiqué par l'assureur \: >>
                 stop after @$ store as 'Type' weight 5;
@@ -250,7 +250,7 @@ rules = {
                 init p=0;
 
                 once after <<Assistance chez \:\$>> set p=1;
-                once when p=1 and @$ set p=2;
+                once after p=1 and @$ set p=2;
                 
                 start after p=2
                 stop when @$ set p=3
